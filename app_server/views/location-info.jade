@@ -1,0 +1,58 @@
+extends layout
+include _includes/shareHTMLfunctions
+
+block content
+ .row
+  .col-xs-12.col-md-9
+   .row
+    .col-xs-12.col-sm-6
+     p.rating
+      +outputRating(locationInfo.rating)
+     p= locationInfo.address
+     .panel.panel-primary
+      .panel-heading
+       h2.panel-title Opening hours
+      .panel-body
+       +outputOpeningHours(locationInfo.openingTime)
+     .panel.panel-primary
+      .panel-heading
+       h2.panel-title Facilities
+      .panel-body
+       p 
+        each facility in locationInfo.facilities
+         span.label.label-warning
+          span.glyphicon.glyphicon-ok
+          |&nbsp;
+          span= facility
+         |&nbsp;
+    .col-xs-12.col-sm-6.location-map
+     .panel.panel-primary
+      .panel-heading
+       h2.panel-title Location map
+      .panel-body
+       <iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=21.036475,105.7818902&hl=es;z=14&amp;output=embed"></iframe>
+   .row
+    .col-xs-12
+     .panel.panel-primary.review-panel
+      .panel-heading
+       a#get-new-review.btn.btn-default.pull-right(href= '') Add review
+       h2.panel-title Customer reviews
+      .panel-body.review.container
+       each review in locationInfo.reviews
+        .row
+         .review
+          .well.well-sm.review-header
+           span.rating
+            +outputRating(review.rating)
+           |&nbsp;
+           span 
+            strong.reviewAuthor= review.author
+           |&nbsp;
+           small.reviewTimestamp
+            +formatDate(review.createdOn)
+          .col-xs-12
+           p= review.reviewText
+  .col-xs-12.col-md-3
+   p.lead simon's Cafe is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.
+           
+

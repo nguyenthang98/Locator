@@ -1,0 +1,34 @@
+doctype html
+html(ng-app='loc8rApp')
+ head
+ meta(charset="utf-8")
+ title= title
+ link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+ link(rel="stylesheet" href="/stylesheets/font-awesome.min.css")
+ link(rel="stylesheet" href="/style/layout.css")
+
+body
+ include ./partials/pageHeader
+
+ #layout-content.container
+   div(ng-view)
+     block content
+
+ include ./partials/pageFooter
+ 
+ script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js')
+ script(src='https://code.angularjs.org/1.5.9/angular-route.min.js')
+ script(src='/angular/loc8r.min.js')
+ //-
+  script(src='/app.js')
+  script(src='/home/home.controller.js')
+  script(src='/common/services/loc8rData.service.js')
+  script(src='/common/services/geolocation.service.js')
+  script(src='/common/filters/formatDistance.filter.js')
+  script(src='/common/directives/ratingStars/ratingStars.directive.js')
+ //-
+  script(src='/common/filters/formatDistance.filter.js')
+  script(src="/javascripts/loc8r.js")
+ script(src="/javascripts/jQuery.min.js")
+ script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+ script(src='/javascripts/validation.js')
