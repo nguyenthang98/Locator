@@ -50,3 +50,4 @@ process.on('SIGTERM',function(){
 
 //Get models and schema
 require('./locations.models');
+require('./users.models');

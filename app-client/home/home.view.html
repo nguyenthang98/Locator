@@ -3,8 +3,10 @@
 	<page-header content='vm.pageHeader'></page-header>
 	<div class="row">
 		<div class="col-xs-12 col-sm-8">
-			<label for="filter">filter results</label>
-			<input type="text" id="filter" name="filter" ng-model='textFilter'>
+			<div class="form-group form-horizontal">
+				<label for="filter" class="control-label">filter results</label>
+				<input type="text" id="filter" name="filter" class="form-control" ng-model='textFilter'>
+			</div>
 			<div class="error">{{ vm.message }}</div>
 			<div class="row list-group">
 				<div class="col-xs-12 list-group-item" ng-repeat='location in vm.data.locations | filter : textFilter'>

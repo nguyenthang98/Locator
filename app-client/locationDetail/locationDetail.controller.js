@@ -3,11 +3,14 @@
 		.module('loc8rApp')
 		.controller('locationDetailCtrl',locationDetailCtrl);
 
-	locationDetailCtrl.$inject = ['$routeParams','loc8rData','$sce'];
-	function locationDetailCtrl ($routeParams,loc8rData,$sce) {
+	locationDetailCtrl.$inject = ['$routeParams','$location','loc8rData','$sce','authentication'];
+	function locationDetailCtrl ($routeParams, $location ,loc8rData,$sce,authentication) {
 		var vm = this;
 		vm.locationId = $routeParams.locationId;
 		
+		vm.isLoggedIn = authentication.isLoggedIn();
+		vm.currentPath = $location.path();
+
 		loc8rData.locationById(vm.locationId)
 			.then(function (response) {
 				console.log(response)
@@ -29,7 +32,7 @@
 		//modal add review controller
 		vm.onSubmit = function () {
 			vm.formError = "";
-			if(!vm.formData.name || !vm.formData.rating || !vm.formData.reviewText){
+			if(/*!vm.formData.name || */!vm.formData.rating || !vm.formData.reviewText){
 				vm.formError = "All fields are required, please try again";
 				return false;
 			}else{
@@ -38,8 +41,9 @@
 		}
 
 		vm.doAddReview = function (locationId,formData) {
+			
 			loc8rData.addReviewById(locationId,{
-				author: formData.name,
+				/*author: authentication.currentUser().name,*/
 				rating: formData.rating,
 				reviewText: formData.reviewText,
 			})

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-//take Location models
+//take Location and User models
 Loc = mongoose.model('Location');
+User = mongoose.model('User');
 
 var sendJSONresponse = function(res, status, content){
   res.status(status);
@@ -181,30 +182,57 @@ module.exports.getReviewsOne = function(req,res){
 }
 /*Create new reiview*/
 module.exports.reviewCreate = function(req,res){
-  var locationid = req.params.locationId;
-  if(locationid){
-    Loc.findById(locationid).select('reviews').exec(function (err,location) {
-      if(err){
-        sendJSONresponse(res,400,err);
-      }else{
-        doAddReview(req,res,location);
-      }
-    });
+  getAuthor(req,res,function (req,res,userName) {
+    var locationid = req.params.locationId;
+    if(locationid){
+      Loc.findById(locationid).select('reviews').exec(function (err,location) {
+        if(err){
+          sendJSONresponse(res,400,err);
+        }else{
+          doAddReview(req,res,location,userName);
+        }
+      });
+    }else{
+      sendJSONresponse(res,404,{
+        'message'  : 'Not found locationid required'
+      });
+    }
+  });
+};
+
+function getAuthor(req,res,callback) {
+  if(req.payload && req.payload.email){
+    User
+      .findOne({email: req.payload.email})
+      .exec(function (err,user) {
+        if(!user){
+          sendJSONresponse(res,404,{
+            "message" : "User not found"
+          });
+          return;
+        }else if(err){
+          console.log(err);
+          sendJSONresponse(res,404,err);
+          return;
+        }
+        callback(req,res,user.name);
+      });
   }else{
     sendJSONresponse(res,404,{
-      'message'  : 'Not found locationid required'
+      "message" : "User not found"
     });
+    return;
   }
 };
 
-function doAddReview (req,res,location) {
+function doAddReview (req,res,location,author) {
   if(!location){
     sendJSONresponse(res,404,{
       'message': 'locationid not found'
     });
   }else{
     location.reviews.push({
-      author : req.body.author,
+      author : author,
       rating : req.body.rating,
       reviewText : req.body.reviewText
     });
