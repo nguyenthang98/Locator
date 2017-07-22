@@ -1,0 +1,8 @@
+# Dependency directory
+node_modules
+
+# Environment variables
+.env
+
+# Mongo database directory
+data
