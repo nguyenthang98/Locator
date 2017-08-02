@@ -86,7 +86,7 @@ var buildLocationList = function(req, res, results, stats) {
 
 /* GET a location by the id */
 module.exports.locationsReadOne = function(req, res) {
-  console.log('Finding location details', req.params);
+  //console.log('Finding location details', req.params);
   if (req.params && req.params.locationid) {
     Loc
       .findById(req.params.locationid)
@@ -101,7 +101,7 @@ module.exports.locationsReadOne = function(req, res) {
           sendJSONresponse(res, 404, err);
           return;
         }
-        console.log(location);
+        //console.log(location);
         sendJSONresponse(res, 200, location);
       });
   } else {
@@ -112,7 +112,7 @@ module.exports.locationsReadOne = function(req, res) {
   }
 };
 module.exports.locationsCreate = function (req,res) {
-  console.log(req.body);
+  //console.log(req.body);
   Loc.create({
     name: req.body.name,
     address: req.body.address,
@@ -129,7 +129,7 @@ module.exports.locationsCreate = function (req,res) {
       console.log(err);
       sendJSONresponse(res, 400, err);
     } else {
-      console.log(location);
+      //console.log(location);
       sendJSONresponse(res, 201, location);
     }
   });
@@ -283,3 +283,22 @@ function doSetAverageRating (location) {
     });
   }
 };
+
+module.exports.reviewDelete = function (req,res) {
+  getAuthor(req,res,function(req,res,userName){
+    var locationid = req.params.locationId;
+    if(locationid){
+      Loc.findById(locationid).select('reviews').exec(function (err,location) {
+        if(err){
+          sendJSONresponse(res,400,err);
+        }else{
+          doDeleteReview(req,res,location,userName);
+        }
+      });
+    }else{
+      sendJSONresponse(res,404,{
+        'message'  : 'Not found locationid required'
+      });
+    }
+  })
+}

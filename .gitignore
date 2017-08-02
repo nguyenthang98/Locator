@@ -1,0 +1,6 @@
+# dependencies module
+node_modules
+# Environment variables
+.env
+# Old folders
+app_server
