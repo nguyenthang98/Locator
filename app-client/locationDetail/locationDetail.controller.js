@@ -13,7 +13,7 @@
 
 		loc8rData.locationById(vm.locationId)
 			.then(function (response) {
-				console.log(response)
+				//console.log(response)
 				vm.data = {
 					location : response.data
 				};
@@ -22,10 +22,14 @@
 					strapline: ''
 				}
 				/*Google map*/
-				// var url = "https://www.google.com/maps/embed/v1/place?q="+response.data.coordinates[1]+","+response.data.coordinates[0]+"&key=AIzaSyDj4EwB-gAC3YgEtK6dbmaquAHtIbiqdnY";
-				var url = "https://www.google.com/maps/embed/v1/view?key=AIzaSyDj4EwB-gAC3YgEtK6dbmaquAHtIbiqdnY&center="+response.data.coordinates[1]+","+response.data.coordinates[0]+"&zoom=17&maptype=roadmap"
+				/*map maker*/
+				vm.initMap(response.data);
+				//google.maps.event.addDomListener(window, 'load', $scope.initialize);	
 
-				vm.mapURL = $sce.trustAsResourceUrl(url);
+				// var url = "https://www.google.com/maps/embed/v1/place?q="+response.data.coordinates[1]+","+response.data.coordinates[0]+"&key=AIzaSyDj4EwB-gAC3YgEtK6dbmaquAHtIbiqdnY";
+				// var url = "https://www.google.com/maps/embed/v1/view?key=AIzaSyDj4EwB-gAC3YgEtK6dbmaquAHtIbiqdnY&center="+response.data.coordinates[1]+","+response.data.coordinates[0]+"&zoom=17&maptype=roadmap";
+
+				// vm.mapURL = $sce.trustAsResourceUrl(url);
 			},function (err) {
 				console.log(err)
 			});
@@ -55,6 +59,21 @@
 					vm.formError = 'Your review has not saved, try again';
 				})
 				return false;
+		}
+
+		vm.initMap = function (location) {
+			var myLatLng = {lat: location.coordinates[1], lng: location.coordinates[0]};
+
+	        var map = new google.maps.Map(document.getElementById('map'), {
+	          zoom: 17,
+	          center: myLatLng
+	        });
+
+	        var marker = new google.maps.Marker({
+	          position: myLatLng,
+	          map: map,
+	          title: location.name
+	        });
 		}
 	};
 })();
